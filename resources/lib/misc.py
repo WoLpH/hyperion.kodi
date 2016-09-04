@@ -25,21 +25,72 @@ import xbmc
 import xbmcaddon
 
 
-def log(msg, format='### [%(addon)s] - %(msg)s', **kwargs):
-    '''Write a debug message to the Kodi log
+def log(msg, format='### [%(addon)s] - %(msg)s', level=xbmc.LOGDEBUG,
+        **kwargs):
+    '''
+    Write a debug message to the Kodi log
+
+    Args:
+        msg (str): The message itself
+        format (str): The format of the log message
+        level (int): The log level
     '''
     addon = xbmcaddon.Addon()
 
     kwargs['addon'] = addon.getAddonInfo('name')
     kwargs['msg'] = msg % kwargs
 
-    xbmc.log(format % kwargs, level=xbmc.LOGDEBUG)
+    xbmc.log(format % kwargs, level=level)
 
 
-def notify(msg):
+# LOGDEBUG = 0
+def debug(msg, **kwargs):
+    return log(msg, level=xbmc.LOGDEBUG, **kwargs)
+
+
+# LOGINFO = 1
+def info(msg, **kwargs):
+    return log(msg, level=xbmc.LOGINFO, **kwargs)
+
+
+# LOGNOTICE = 2
+def notice(msg, **kwargs):
+    return log(msg, level=xbmc.LOGNOTICE, **kwargs)
+
+
+# LOGWARNING = 3
+def warning(msg, **kwargs):
+    return log(msg, level=xbmc.LOGWARNING, **kwargs)
+
+
+# LOGERROR = 4
+def error(msg, **kwargs):
+    return log(msg, level=xbmc.LOGERROR, **kwargs)
+
+
+# LOGSEVERE = 5
+def severe(msg, **kwargs):
+    return log(msg, level=xbmc.LOGSEVERE, **kwargs)
+
+
+# LOGFATAL = 6
+def fatal(msg, **kwargs):
+    return log(msg, level=xbmc.LOGFATAL, **kwargs)
+
+
+# LOGNONE = 7
+def none(msg, **kwargs):
+    return log(msg, level=xbmc.LOGNONE, **kwargs)
+
+
+def notify(msg, **kwargs):
     '''Show a notification in Kodi
     '''
+    log(msg, **kwargs)
     addon = xbmcaddon.Addon()
     xbmc.executebuiltin('XBMC.Notification(%s,%s,%s,%s)' % (
-        addon.getAddonInfo('name'), msg, 1000, addon.getAddonInfo('icon')))
+        addon.getAddonInfo('name'),
+        msg % kwargs,
+        10000,
+        addon.getAddonInfo('icon')))
 

@@ -23,11 +23,11 @@ msgid "Enable addon (Grabbing)"
 msgstr ""
 
 msgctxt "#32003"
-msgid "Hyperion host IP-address"
+msgid "Hyperion host"
 msgstr ""
 
 msgctxt "#32004"
-msgid "Hyperion host PROTO-port"
+msgid "Hyperion port"
 msgstr ""
 
 msgctxt "#32005"
@@ -65,3 +65,20 @@ msgstr ""
 msgctxt "#32102"
 msgid "ATTENTION: Higher the values below may lead to performance issues"
 msgstr ""
+
+msgctxt "#32103"
+msgid "Debugging"
+msgstr ""
+
+msgctxt "#32104"
+msgid "Enable debugging"
+msgstr ""
+
+msgctxt "#32105"
+msgid "Debug host (pydev/pycharm)"
+msgstr ""
+
+msgctxt "#32106"
+msgid "Debug port"
+msgstr ""
+

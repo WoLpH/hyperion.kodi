@@ -22,10 +22,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+import sys
+
+import os
 import xbmc
 import xbmcaddon
-import os
-import sys
 
 # Add the library path before loading Hyperion
 __addon__ = xbmcaddon.Addon()
@@ -33,11 +34,25 @@ __cwd__ = __addon__.getAddonInfo('path')
 sys.path.append(xbmc.translatePath(os.path.join(__cwd__, 'resources', 'lib')))
 
 if __name__ == '__main__':
+    import misc
     from settings import Settings
     from state import DisconnectedState
 
     # read settings
     settings = Settings()
+    misc.log('TEST LOG FROM HYPERION')
+
+    print 'settings', settings.__dict__
+    misc.log('%(settings)s', settings=settings.__dict__)
+    if settings.debug:
+        try:
+            import pydevd
+
+            pydevd.settrace(host=settings.debug_host, port=settings.debug_port,
+                            stdoutToServer=True, stderrToServer=True)
+        except Exception as exception:
+            misc.notify('Error while enabling debugger: %(exception)r',
+                        exception=exception)
 
     # initialize the state
     state = DisconnectedState(settings)

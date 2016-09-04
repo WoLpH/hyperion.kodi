@@ -24,72 +24,76 @@ THE SOFTWARE.
 import xbmc
 import xbmcaddon
 
-from misc import log
+import misc
 
 
 class MyMonitor(xbmc.Monitor):
-    '''Class to capture changes in settings and screensaver state
-    '''
+    '''Class to capture changes in settings and screensaver state'''
 
     def __init__(self, settings):
         xbmc.Monitor.__init__(self)
-        self.__settings = settings
-        self.__settings.screensaver = xbmc.getCondVisibility(
+        self._settings = settings
+        self._settings.screensaver = xbmc.getCondVisibility(
             'System.ScreenSaverActive')
-        self.__settings.abort = xbmc.abortRequested
+        self._settings.abort = xbmc.abortRequested
 
     def onAbortRequested(self):
-        self.__settings.abort = False
+        self._settings.abort = False
 
     def onSettingsChanged(self):
-        self.__settings.readSettings()
+
+        self._settings.readSettings()
 
     def onScreensaverDeactivated(self):
-        self.__settings.screensaver = False
+        self._settings.screensaver = False
 
     def onScreensaverActivated(self):
-        self.__settings.screensaver = True
+        self._settings.screensaver = True
 
 
 class Settings:
-    '''Class which contains all addon settings and xbmc state items of interest
+    '''
+    Class which contains all addon settings and xbmc state items of interest
     '''
 
     def __init__(self):
         '''Constructor
         '''
         self.rev = 0
-        self.__monitor = MyMonitor(self)
-        self.__player = xbmc.Player()
+        self._monitor = MyMonitor(self)
+        self._player = xbmc.Player()
         self.readSettings()
 
     def __del__(self):
-        '''Destructor
-        '''
-        del self.__monitor
-        del self.__player
+        '''Destructor'''
+        del self._monitor
+        del self._player
 
     def readSettings(self):
-        '''(Re-)read all settings
-        '''
-        log('Reading settings')
+        '''(Re-)read all settings'''
+        misc.log('Reading settings')
         addon = xbmcaddon.Addon()
         self.enable = bool(addon.getSetting('hyperion_enable'))
         self.enableScreensaver = bool(addon.getSetting('screensaver_enable'))
-        self.address = addon.getSetting('hyperion_ip')
+        self.address = addon.getSetting('hyperion_host')
         self.port = int(addon.getSetting('hyperion_port'))
         self.priority = int(addon.getSetting('hyperion_priority'))
         self.timeout = int(addon.getSetting('reconnect_timeout'))
         self.capture_width = int(addon.getSetting('capture_width'))
         self.capture_height = int(addon.getSetting('capture_height'))
         self.framerate = int(addon.getSetting('framerate'))
+        self.debug = bool(addon.getSetting('debug'))
+        self.debug_host = addon.getSetting('debug_host')
+        self.debug_port = int(addon.getSetting('debug_port'))
 
         self.showErrorMessage = True
         self.rev += 1
 
     def grabbing(self):
-        '''Check if we grabbing is requested based on the current state and settings
         '''
-        return self.enable and self.__player.isPlayingVideo() and (
+        Check if we grabbing is requested based on the current state and
+        settings
+        '''
+        return self.enable and self._player.isPlayingVideo() and (
             self.enableScreensaver or not self.screensaver)
 

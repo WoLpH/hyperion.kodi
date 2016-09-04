@@ -41,7 +41,7 @@ class BaseState(object):
         Args:
             settings (Settings): Settings structure
         '''
-        log('Entering %(name)s state', self._class__.__name__.lower())
+        log('Entering %(name)s state', name=self.__class__.__name__.lower())
         self._settings = settings
 
     @abc.abstractmethod
@@ -113,7 +113,7 @@ class ConnectedState(BaseState):
 
     def useLegacyApi(self):
         '''check the xbmc API Version'''
-        if self._usageLegacyApi is None:
+        if self._useLegacyApi is None:
             try:
                 self._capture.getCaptureState()
                 self._useLegacyApi = True

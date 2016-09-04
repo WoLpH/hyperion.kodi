@@ -3,14 +3,19 @@
 	<category label="32001">
 		<setting id="hyperion_enable" type="bool" label="32002" default="true" />
 		<setting id="screensaver_enable" type="bool" label="32007" default="false" subsetting="true" visible="eq(-1,true)" enable="eq(-1,true)"/>
-		<setting id="hyperion_ip" type="text" label="32003" default="127.0.0.1" />
+		<setting id="hyperion_host" type="text" label="32003" default="127.0.0.1" />
 		<setting id="hyperion_port" type="number" label="32004" default="19445" />
-		<setting id="hyperion_priority" type="number" label="32005" default="800" />
-		<setting id="reconnect_timeout" type="number" label="32006" default="30" />
-		 <setting type="sep"/>
+		<setting id="hyperion_priority" type="slider" label="32005" default="800" range="0,1000" option="int"/>
+		<setting id="reconnect_timeout" type="slider" label="32006" default="30" range="0,300" option="int" />
+        <setting type="sep"/>
 		<setting label="32102" type="lsep"/>
-		<setting id="capture_width" type="number" label="32008" default="64" />
-		<setting id="capture_height" type="number" label="32009" default="64" />
-		<setting id="framerate" type="number" label="32010" default="10" />
+		<setting id="capture_width" type="slider" label="32008" default="64" range="2,2,512" option="int" />
+		<setting id="capture_height" type="slider" label="32009" default="64" range="2,2,512" option="int" />
+		<setting id="framerate" type="slider" label="32010" default="10" range="1,120" option="int" />
+		<setting type="sep"/>
+		<setting label="32103" type="lsep"/>
+		<setting id="debug" type="bool" label="32104" default="false" />
+		<setting id="debug_host" type="text" label="32105" default="127.0.0.1" visible="eq(-1,true)" />
+		<setting id="debug_port" type="number" label="32106" default="19443" visible="eq(-2,true)" />
 	</category>
 </settings>

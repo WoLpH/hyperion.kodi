@@ -48,17 +48,17 @@ class Hyperion(object):
         - port   : port number of Hyperion
         '''
         # create a new socket
-        self.__socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.__socket.settimeout(2)
+        self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self._socket.settimeout(2)
 
         # Connect socket to the provided server
-        self.__socket.connect((server, port))
+        self._socket.connect((server, port))
 
     def __del__(self):
         '''Destructor
         '''
         # close the socket
-        self.__socket.close()
+        self._socket.close()
 
     def sendColor(self, color, priority, duration=-1):
         '''Send a static color to Hyperion
@@ -75,7 +75,7 @@ class Hyperion(object):
         colorRequest.duration = duration
 
         # send the message
-        self.__sendMessage(request)
+        self._sendMessage(request)
 
     def sendImage(self, width, height, data, priority, duration=-1):
         '''Send an image to Hyperion
@@ -96,7 +96,7 @@ class Hyperion(object):
         imageRequest.duration = duration
 
         # send the message
-        self.__sendMessage(request)
+        self._sendMessage(request)
 
     def clear(self, priority):
         '''Clear the given priority channel
@@ -109,7 +109,7 @@ class Hyperion(object):
         clearRequest.priority = priority
 
         # send the message
-        self.__sendMessage(request)
+        self._sendMessage(request)
 
     def clearall(self):
         '''Clear all active priority channels
@@ -119,7 +119,7 @@ class Hyperion(object):
         request.command = HyperionRequest.CLEARALL
 
         # send the message
-        self.__sendMessage(request)
+        self._sendMessage(request)
 
     def __sendMessage(self, message):
         '''Send the given proto message to Hyperion. A RuntimeError will
@@ -132,13 +132,13 @@ class Hyperion(object):
         # send message to Hyperion"
         binaryRequest = message.SerializeToString()
         binarySize = struct.pack('>I', len(binaryRequest))
-        self.__socket.sendall(binarySize)
-        self.__socket.sendall(binaryRequest)
+        self._socket.sendall(binarySize)
+        self._socket.sendall(binaryRequest)
 
         # receive a reply from Hyperion
-        size = struct.unpack('>I', self.__socket.recv(4))[0]
+        size = struct.unpack('>I', self._socket.recv(4))[0]
         reply = HyperionReply()
-        reply.ParseFromString(self.__socket.recv(size))
+        reply.ParseFromString(self._socket.recv(size))
 
         # check the reply
         # print "Reply received:\n%s" % (reply)
