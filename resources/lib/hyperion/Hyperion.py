@@ -24,6 +24,17 @@ THE SOFTWARE.
 import socket
 import struct
 
+try:
+    import pkgutil
+    import pkg_resources
+    if not hasattr(pkg_resources, 'declare_namespace'):
+        def declare_namespace(name):
+            return pkgutil.extend_path(__path__, name)
+
+        pkg_resources.declare_namespace = declare_namespace
+except ImportError:
+    pass
+
 # protobuf message includes
 from message_pb2 import HyperionRequest
 from message_pb2 import HyperionReply
