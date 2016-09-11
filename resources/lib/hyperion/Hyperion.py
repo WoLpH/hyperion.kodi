@@ -21,6 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
+import os
 import socket
 import struct
 
@@ -29,7 +30,7 @@ try:
     import pkg_resources
     if not hasattr(pkg_resources, 'declare_namespace'):
         def declare_namespace(name):
-            return pkgutil.extend_path(__path__, name)
+            return pkgutil.extend_path(os.path.dirname(__file__), name)
 
         pkg_resources.declare_namespace = declare_namespace
 except ImportError:
