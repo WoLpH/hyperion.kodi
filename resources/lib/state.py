@@ -133,6 +133,9 @@ class ConnectedState(BaseState):
         else:
             data = self._capture.getImage()
 
+        if not data:
+            return
+
         # retrieve image data and reformat into rgb format
         if self._capture.getImageFormat() == 'ARGB':
             del data[0::4]
