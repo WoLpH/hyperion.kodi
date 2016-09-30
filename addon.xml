@@ -3,7 +3,7 @@
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.pydevd" version="3.4.1"/>
-    <import addon="script.module.protobuf3" version="3.1.0"/>
+    <import addon="script.module.protobuf3" version="3.1.0.post1"/>
   </requires>
   <extension point="xbmc.service" library="addon.py" start="login"></extension>
   <extension point="xbmc.addon.metadata">
