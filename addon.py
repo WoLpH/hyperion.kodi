@@ -28,6 +28,7 @@ import os
 import xbmc
 import xbmcaddon
 
+
 # Add the library path before loading Hyperion
 __addon__ = xbmcaddon.Addon()
 __cwd__ = __addon__.getAddonInfo('path')
