@@ -25,9 +25,8 @@ import xbmc
 import xbmcaddon
 
 import abc
+import misc
 from hyperion.Hyperion import Hyperion
-from misc import log
-from misc import notify
 
 
 class BaseState(object):
@@ -41,7 +40,7 @@ class BaseState(object):
         Args:
             settings (Settings): Settings structure
         '''
-        log('Entering %(name)s state', name=self.__class__.__name__.lower())
+        misc.log('Entering %(name)s state', name=self.__class__.__name__.lower())
         self._settings = settings
 
     @abc.abstractmethod
@@ -71,7 +70,7 @@ class DisconnectedState(BaseState):
         except Exception as exception:
             # unable to connect. notify and go to the error state
             if self._settings.showErrorMessage:
-                notify(xbmcaddon.Addon().getLocalizedString(32100))
+                xbmc.notify(xbmcaddon.Addon().getLocalizedString(32100))
                 self._settings.showErrorMessage = False
 
             # continue in the error state
@@ -93,9 +92,7 @@ class ConnectedState(BaseState):
         self._useLegacyApi = None
 
         # try to connect to hyperion
-        self._hyperion = Hyperion(
-            self._settings.address,
-            self._settings.port)
+        self._hyperion = Hyperion(self._settings.address, self._settings.port)
 
         # create the capture object
         self._capture = xbmc.RenderCapture()
@@ -166,8 +163,14 @@ class ConnectedState(BaseState):
                     500,
                 )
             except Exception as exception:
+                raise
                 # unable to send image. notify and go to the error state
-                notify(xbmcaddon.Addon().getLocalizedString(32101))
+                # TODO: fix notification error
+                # xbmc.notify(xbmcaddon.Addon().getLocalizedString(32101))
+                misc.error(
+                    '%(message)s %(exception)r',
+                    message=xbmcaddon.Addon().getLocalizedString(32101),
+                    exception=exception)
                 return ErrorState(self._settings, exception)
 
         if self.useLegacyApi():

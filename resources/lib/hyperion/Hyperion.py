@@ -133,7 +133,7 @@ class Hyperion(object):
         # send the message
         self._sendMessage(request)
 
-    def __sendMessage(self, message):
+    def _sendMessage(self, message):
         '''Send the given proto message to Hyperion. A RuntimeError will
         be raised if the reply contains an error
         - message : proto request to send
