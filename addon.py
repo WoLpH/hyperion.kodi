@@ -22,9 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-import sys
-
 import os
+import sys
 import xbmc
 import xbmcaddon
 
@@ -41,19 +40,8 @@ if __name__ == '__main__':
 
     # read settings
     settings = Settings()
-    misc.log('TEST LOG FROM HYPERION')
 
-    print 'settings', settings.__dict__
     misc.log('%(settings)s', settings=settings.__dict__)
-    if settings.debug:
-        try:
-            import pydevd
-
-            pydevd.settrace(host=settings.debug_host, port=settings.debug_port,
-                            stdoutToServer=True, stderrToServer=True)
-        except Exception as exception:
-            misc.notify('Error while enabling debugger: %(exception)r',
-                        exception=exception)
 
     # initialize the state
     state = DisconnectedState(settings)
