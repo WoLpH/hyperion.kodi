@@ -24,6 +24,47 @@ THE SOFTWARE.
 import xbmc
 import xbmcaddon
 
+import logging
+
+
+LOGLEVELS = {
+    logging.CRITICAL: xbmc.LOGFATAL,
+    logging.ERROR: xbmc.LOGERROR,
+    logging.WARNING: xbmc.LOGWARNING,
+    logging.INFO: xbmc.LOGINFO,
+    logging.DEBUG: xbmc.LOGDEBUG,
+    logging.NOTSET: xbmc.LOGNONE,
+}
+
+
+class KodiLogHandler(logging.StreamHandler):
+    FORMAT = b'%(name)s: %(message)s'
+    PRE_FORMAT = b'[%(id)s] %(FORMAT)s'
+
+    def __init__(self):
+        logging.StreamHandler.__init__(self)
+        addon = xbmcaddon.Addon()
+
+        params = dict(
+            id=addon.getAddonInfo('id'),
+            version=addon.getAddonInfo('version'),
+            name=addon.getAddonInfo('name'),
+            FORMAT=self.FORMAT,
+        )
+
+        self.setFormatter(logging.Formatter(self.PREFIX % params))
+
+    def emit(self, record):
+        if getSettingAsBool('debug'):
+            try:
+                xbmc.log(self.format(record), levels[record.levelno])
+            except UnicodeEncodeError:
+                xbmc.log(self.format(record).encode('utf-8', 'ignore'), levels[record.levelno])
+
+    def flush(self):
+        pass
+
+
 
 def log(msg, format='### [%(addon)s] - %(msg)s', level=xbmc.LOGDEBUG,
         **kwargs):
